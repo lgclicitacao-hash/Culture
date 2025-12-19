@@ -1,0 +1,120 @@
+================================================================================
+USUÁRIOS DO PORTAL LGC CONSULTORIA - CULTURA ORGANIZACIONAL
+================================================================================
+
+PROJETO SUPABASE
+URL: https://uushczefewuwnictpkqn.supabase.co
+Tenant: lgc_consultoria
+
+================================================================================
+ADMINISTRADOR
+================================================================================
+
+1. Awdren
+   Email: awdren@lgcconsultoria.com.br
+   Role: admin
+   Senha inicial sugerida: LGC@2025!temp
+   Permissões: Acesso total ao sistema
+
+================================================================================
+STAFF - EQUIPE LGC CONSULTORIA
+================================================================================
+
+2. Aline
+   Email: aline@lgcconsultoria.com.br
+   Role: staff
+   Senha inicial sugerida: LGC@2025!temp
+   Permissões: Todos os módulos + Gestão de Funcionários
+
+3. Hélio
+   Email: helio@lgcconsultoria.com.br
+   Role: staff
+   Senha inicial sugerida: LGC@2025!temp
+   Permissões: Todos os módulos + Gestão de Funcionários
+
+4. Julliano
+   Email: julliano@lgcconsultoria.com.br
+   Role: staff
+   Senha inicial sugerida: LGC@2025!temp
+   Permissões: Todos os módulos + Gestão de Funcionários
+
+5. Muriel
+   Email: muriel@lgcconsultoria.com.br
+   Role: staff
+   Senha inicial sugerida: LGC@2025!temp
+   Permissões: Todos os módulos + Gestão de Funcionários
+
+6. Nicole
+   Email: nicole@lgcconsultoria.com.br
+   Role: staff
+   Senha inicial sugerida: LGC@2025!temp
+   Permissões: Todos os módulos + Gestão de Funcionários
+
+================================================================================
+CLIENTE - CONSULTORA CNP
+================================================================================
+
+7. Renata Tarsitano
+   Email: renata.tarsitano@cnp.com.br
+   Role: client
+   Senha inicial sugerida: LGC@2025!temp
+   Permissões: Visualização de todos os módulos (sem gestão de funcionários)
+
+================================================================================
+MÓDULOS POR PERMISSÃO
+================================================================================
+
+CLIENT (cliente):
+  ✓ Dashboard
+  ✓ Linha do Tempo
+  ✓ Jornada
+  ✓ Entregáveis
+  ✓ Reuniões
+  ✓ Documentos
+  ✓ Tarefas
+  ✓ Assessment
+
+STAFF (colaborador):
+  ✓ Todos os módulos do CLIENT
+  ✓ Funcionários (gestão de colaboradores)
+
+ADMIN (administrador):
+  ✓ Todos os módulos do STAFF
+  ✓ Admin (configurações)
+  ✓ Audit (auditoria)
+
+================================================================================
+INSTRUÇÕES DE PRIMEIRO ACESSO
+================================================================================
+
+1. Acesse: [URL do sistema]/login.html
+
+2. Digite seu email e senha inicial
+
+3. Após o primeiro login, recomenda-se alterar a senha
+
+4. Em caso de problemas, entre em contato com o administrador
+
+================================================================================
+NOTAS IMPORTANTES
+================================================================================
+
+- Todos os usuários devem alterar a senha no primeiro acesso
+- Mantenha suas credenciais seguras
+- Não compartilhe sua senha com terceiros
+- Em caso de esquecimento de senha, contate o administrador
+- O sistema utiliza autenticação Supabase com segurança de ponta
+
+================================================================================
+SUPORTE TÉCNICO
+================================================================================
+
+Para problemas técnicos ou dúvidas sobre o sistema:
+- Contate a equipe de desenvolvimento
+- Consulte a documentação em README.md
+- Consulte o guia rápido em GUIA-RAPIDO.md
+
+================================================================================
+Data de criação: Dezembro 2024
+Versão do sistema: 1.0
+================================================================================
