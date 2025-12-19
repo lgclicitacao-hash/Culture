@@ -4,7 +4,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 // Configuração do Supabase
 const SUPABASE_URL = "https://uushczefewuwnictpkqn.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1c2hjemVmZXd1d25pY3Rwa3FuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQ2MzA0MjgsImV4cCI6MjA1MDIwNjQyOH0.a4UXyq9feisKV_6Tge459w_7Ioa7U97M-qS9kZCxUoE";
+const SUPABASE_ANON_KEY = "sb_publishable_a4UXyq9feisKV_6Tge459w_7Ioa7U97";
 
 // Criar cliente Supabase
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
