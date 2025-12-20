@@ -194,12 +194,6 @@
     const loginBtn = document.getElementById("loginBtn");
     const form = document.getElementById("loginForm");
 
-    // Verificar se já está autenticado
-    const { data: sessionData } = await supabase.auth.getSession();
-    if (sessionData.session) {
-      window.location.href = "/index.html";
-    }
-
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       errorMsg.textContent = "";
