@@ -127,6 +127,10 @@ const TimelineComponent = {
   },
 
   renderNextStep(step) {
+    // Acesso seguro ao App (este método não compartilha escopo com render())
+    const app = window.App || {};
+    const formatDate = typeof app.formatDate === "function" ? app.formatDate : (d => d || "-");
+
     const dueDate = new Date(step.dueDate + "T00:00:00");
     const now = new Date();
     const isOverdue = dueDate < now && step.status !== "Concluído";
@@ -146,7 +150,7 @@ const TimelineComponent = {
             <strong>Responsável:</strong> ${step.responsible}
           </span>
           <span class="next-step-due">
-            <strong>Data:</strong> ${App.formatDate(step.dueDate)}
+            <strong>Data:</strong> ${formatDate(step.dueDate)}
           </span>
         </div>
       </div>
@@ -154,6 +158,11 @@ const TimelineComponent = {
   },
 
   renderMilestone(milestone, index) {
+    // Acesso seguro ao App (este método não compartilha escopo com render())
+    const app = window.App || {};
+    const formatDate = typeof app.formatDate === "function" ? app.formatDate : (d => d || "-");
+    const getStatusClass = typeof app.getStatusClass === "function" ? app.getStatusClass : (s => "");
+
     const hasActualDate = milestone.actualDate !== null;
     const isDelayed = hasActualDate &&
                      new Date(milestone.actualDate + "T00:00:00") > new Date(milestone.plannedDate + "T00:00:00");
