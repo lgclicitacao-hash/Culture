@@ -7,6 +7,7 @@ const supabase = createClient(
   "sb_publishable_a4UXyq9feisKV_6Tge459w_7Ioa7U97"
 );
 
+// Tornar o App acessível globalmente para os componentes carregados via script não-module
 const App = {
   currentUser: null,
   currentRoute: "dashboard",
@@ -310,3 +311,6 @@ const App = {
 
 // Inicializar quando o DOM estiver pronto
 document.addEventListener("DOMContentLoaded", async () => await App.init());
+
+// Expor no escopo global para componentes não-module que referenciam App
+window.App = App;
