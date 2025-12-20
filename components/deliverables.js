@@ -6,6 +6,12 @@ const DeliverablesComponent = {
   selectedDeliverable: null,
 
   render() {
+    // Garantir referência segura ao App global
+    const app = window.App || {};
+    const isAdmin = typeof app.isAdmin === "function" ? app.isAdmin() : false;
+    const formatDate = typeof app.formatDate === "function" ? app.formatDate : (d => d || "-");
+    const getIcon = typeof app.getIcon === "function" ? app.getIcon.bind(app) : (() => "");
+
     const data = DataManager.getData();
     const deliverables = data.deliverables || [];
     const phases = data.journey.phases;
@@ -45,7 +51,7 @@ const DeliverablesComponent = {
               `).join('')}
             </select>
           </div>
-          ${App.isAdmin() ? `
+          ${isAdmin ? `
             <button class="btn btn-primary" onclick="DeliverablesComponent.showAddDeliverableModal()">
               + Novo Entregável
             </button>
@@ -162,6 +168,8 @@ const DeliverablesComponent = {
   renderDeliverableCard(deliverable, phases) {
     const phase = phases.find(p => p.id === deliverable.phase);
     const isLate = deliverable.plannedDate && new Date(deliverable.plannedDate) < new Date() && deliverable.status !== 'Concluído';
+    const app = window.App || {};
+    const formatDate = typeof app.formatDate === "function" ? app.formatDate : (d => d || "-");
 
     return `
       <div class="deliverable-card ${isLate ? 'late' : ''}" onclick="DeliverablesComponent.showDetail('${deliverable.id}')">
@@ -178,7 +186,7 @@ const DeliverablesComponent = {
           <span>${deliverable.progress}%</span>
         </div>
         <div class="deliverable-footer">
-          <span class="date">${App.formatDate(deliverable.plannedDate)}</span>
+          <span class="date">${formatDate(deliverable.plannedDate)}</span>
           <span class="evidences-count">${deliverable.evidences.length} evidências</span>
         </div>
       </div>
@@ -188,6 +196,8 @@ const DeliverablesComponent = {
   renderDeliverableRow(deliverable, phases) {
     const phase = phases.find(p => p.id === deliverable.phase);
     const isLate = deliverable.plannedDate && new Date(deliverable.plannedDate) < new Date() && deliverable.status !== 'Concluído';
+    const app = window.App || {};
+    const formatDate = typeof app.formatDate === "function" ? app.formatDate : (d => d || "-");
 
     return `
       <tr class="${isLate ? 'row-late' : ''}">
@@ -204,7 +214,7 @@ const DeliverablesComponent = {
           </div>
           ${deliverable.progress}%
         </td>
-        <td>${App.formatDate(deliverable.plannedDate)}</td>
+        <td>${formatDate(deliverable.plannedDate)}</td>
         <td>${deliverable.evidences.length}</td>
         <td>
           <button class="btn btn-sm btn-secondary" onclick="DeliverablesComponent.showDetail('${deliverable.id}')">
@@ -218,6 +228,9 @@ const DeliverablesComponent = {
   renderDeliverableDetail(deliverable) {
     const data = DataManager.getData();
     const phase = data.journey.phases.find(p => p.id === deliverable.phase);
+    const app = window.App || {};
+    const formatDate = typeof app.formatDate === "function" ? app.formatDate : (d => d || "-");
+    const isAdmin = typeof app.isAdmin === "function" ? app.isAdmin() : false;
 
     return `
       <div class="modal-content modal-lg">
@@ -253,11 +266,11 @@ const DeliverablesComponent = {
                 </div>
                 <div class="info-row">
                   <label>Data Prevista:</label>
-                  <span>${App.formatDate(deliverable.plannedDate)}</span>
+                  <span>${formatDate(deliverable.plannedDate)}</span>
                 </div>
                 <div class="info-row">
                   <label>Data de Conclusão:</label>
-                  <span>${deliverable.completedDate ? App.formatDate(deliverable.completedDate) : '-'}</span>
+                  <span>${deliverable.completedDate ? formatDate(deliverable.completedDate) : '-'}</span>
                 </div>
               </div>
               <div class="detail-description">
@@ -276,7 +289,7 @@ const DeliverablesComponent = {
                       <div class="evidence-info">
                         <strong>${ev.title}</strong>
                         <div class="evidence-meta">
-                          <span>${App.formatDate(ev.uploadedAt)}</span>
+                          <span>${formatDate(ev.uploadedAt)}</span>
                           <span>${ev.uploadedBy}</span>
                         </div>
                       </div>
@@ -292,7 +305,7 @@ const DeliverablesComponent = {
               ` : `
                 <p class="text-muted">Nenhuma evidência cadastrada</p>
               `}
-              ${App.isAdmin() ? `
+              ${isAdmin ? `
                 <button class="btn btn-secondary mt-3" onclick="DeliverablesComponent.showAddEvidenceForm('${deliverable.id}')">
                   + Adicionar Evidência
                 </button>
@@ -318,7 +331,7 @@ const DeliverablesComponent = {
           </div>
         </div>
         <div class="modal-footer">
-          ${App.isAdmin() ? `
+          ${isAdmin ? `
             <button class="btn btn-secondary" onclick="DeliverablesComponent.editDeliverable('${deliverable.id}')">
               Editar
             </button>
@@ -344,12 +357,18 @@ const DeliverablesComponent = {
 
   setView(view) {
     this.currentView = view;
-    App.render();
+    const app = window.App || {};
+    if (typeof app.render === "function") {
+      app.render();
+    }
   },
 
   setFilter(phase) {
     this.filterPhase = phase;
-    App.render();
+    const app = window.App || {};
+    if (typeof app.render === "function") {
+      app.render();
+    }
   },
 
   showDetail(deliverableId) {
