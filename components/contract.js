@@ -262,3 +262,6 @@ const ContractComponent = {
     // Event listeners já estão configurados inline
   }
 };
+
+// Expor componente globalmente para os onclick
+window.ContractComponent = ContractComponent;

@@ -233,3 +233,6 @@ const TimelineComponent = {
     // Adicionar funcionalidades interativas se necessário
   }
 };
+
+// Expor componente globalmente para os onclick
+window.TimelineComponent = TimelineComponent;

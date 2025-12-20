@@ -992,3 +992,6 @@ const AssessmentComponent = {
     });
   }
 };
+
+// Expor componente globalmente para os onclick
+window.AssessmentComponent = AssessmentComponent;

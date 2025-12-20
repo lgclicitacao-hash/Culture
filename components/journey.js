@@ -191,3 +191,6 @@ const JourneyComponent = {
     // Event listeners já configurados inline
   }
 };
+
+// Expor componente globalmente para os onclick
+window.JourneyComponent = JourneyComponent;

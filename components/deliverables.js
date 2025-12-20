@@ -319,7 +319,7 @@ const DeliverablesComponent = {
               <div class="changelog-list">
                 ${deliverable.changelog.map(log => `
                   <div class="changelog-entry">
-                    <div class="changelog-date">${App.formatDate(log.date)}</div>
+                    <div class="changelog-date">${formatDate(log.date)}</div>
                     <div class="changelog-change">${log.change}</div>
                     <div class="changelog-user">${log.user}</div>
                   </div>
@@ -398,3 +398,6 @@ const DeliverablesComponent = {
     // Event listeners configurados inline
   }
 };
+
+// Expor componente globalmente para os onclick
+window.DeliverablesComponent = DeliverablesComponent;

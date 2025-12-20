@@ -260,3 +260,6 @@ const MeetingsComponent = {
     // Nenhuma interação adicional necessária
   }
 };
+
+// Expor componente globalmente para os onclick
+window.MeetingsComponent = MeetingsComponent;
