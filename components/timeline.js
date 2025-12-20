@@ -1,15 +1,19 @@
 // components/timeline.js - Componente de Linha do Tempo e Setup do Projeto
 
 const TimelineComponent = {
-  render() {
-    const data = DataManager.getData();
-    const { project, timeline, nextSteps } = data;
-    
-    // Acesso seguro ao App
+  getHelpers() {
     const app = window.App || {};
     const formatDate = typeof app.formatDate === "function" ? app.formatDate : (d => d || "-");
     const getStatusClass = typeof app.getStatusClass === "function" ? app.getStatusClass : (s => "");
     const isAdmin = typeof app.isAdmin === "function" ? app.isAdmin() : false;
+    const renderApp = typeof app.render === "function" ? app.render.bind(app) : (() => {});
+    return { formatDate, getStatusClass, isAdmin, renderApp };
+  },
+
+  render() {
+    const data = DataManager.getData();
+    const { project, timeline, nextSteps } = data;
+    const { formatDate, isAdmin } = this.getHelpers();
 
     // Validar dados
     if (!project || !timeline || !nextSteps) {
@@ -127,9 +131,7 @@ const TimelineComponent = {
   },
 
   renderNextStep(step) {
-    // Acesso seguro ao App (este método não compartilha escopo com render())
-    const app = window.App || {};
-    const formatDate = typeof app.formatDate === "function" ? app.formatDate : (d => d || "-");
+    const { formatDate } = this.getHelpers();
 
     const dueDate = new Date(step.dueDate + "T00:00:00");
     const now = new Date();
@@ -158,10 +160,7 @@ const TimelineComponent = {
   },
 
   renderMilestone(milestone, index) {
-    // Acesso seguro ao App (este método não compartilha escopo com render())
-    const app = window.App || {};
-    const formatDate = typeof app.formatDate === "function" ? app.formatDate : (d => d || "-");
-    const getStatusClass = typeof app.getStatusClass === "function" ? app.getStatusClass : (s => "");
+    const { formatDate, getStatusClass } = this.getHelpers();
 
     const hasActualDate = milestone.actualDate !== null;
     const isDelayed = hasActualDate &&
@@ -200,6 +199,7 @@ const TimelineComponent = {
   },
 
   renderNextStepCard(step) {
+    const { formatDate, isAdmin } = this.getHelpers();
     const statusClass = step.status === "Concluído" ? "status-done" : "status-pending";
 
     return `
@@ -235,12 +235,13 @@ const TimelineComponent = {
   },
 
   toggleStepStatus(stepId) {
+    const { renderApp } = this.getHelpers();
     const data = DataManager.getData();
     const step = data.nextSteps.find(s => s.id === stepId);
     if (step) {
       step.status = step.status === "Concluído" ? "Pendente" : "Concluído";
       DataManager.saveData(data);
-      App.render();
+      renderApp();
     }
   },
 
