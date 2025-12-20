@@ -4,6 +4,11 @@ const ContractComponent = {
   render() {
     const data = DataManager.getData();
     const contract = data.documents.contract;
+    
+    // Acesso seguro ao App
+    const app = window.App || {};
+    const formatDate = typeof app.formatDate === "function" ? app.formatDate : (d => d || "-");
+    const isAdmin = typeof app.isAdmin === "function" ? app.isAdmin() : false;
 
     return `
       <div class="page-header">
@@ -36,11 +41,11 @@ const ContractComponent = {
               </div>
               <div class="meta-item">
                 <span class="meta-label">Início</span>
-                <span class="meta-value">${App.formatDate(contract.startDate)}</span>
+                <span class="meta-value">${formatDate(contract.startDate)}</span>
               </div>
               <div class="meta-item">
                 <span class="meta-label">Término</span>
-                <span class="meta-value">${App.formatDate(contract.endDate)}</span>
+                <span class="meta-value">${formatDate(contract.endDate)}</span>
               </div>
               <div class="meta-item">
                 <span class="meta-label">Status Financeiro</span>
@@ -73,7 +78,7 @@ const ContractComponent = {
       <div class="card">
         <div class="card-header-with-action">
           <h3 class="card-title">Aditivos e Anexos</h3>
-          ${App.isAdmin() ? `
+          ${isAdmin ? `
             <button class="btn btn-primary btn-sm" onclick="ContractComponent.showAddAdditiveModal()">
               + Adicionar Aditivo
             </button>
@@ -172,7 +177,7 @@ const ContractComponent = {
           <div class="additive-actions">
             <a href="${additive.path}" target="_blank" class="btn btn-sm btn-primary">Abrir</a>
             <a href="${additive.path}" download class="btn btn-sm btn-secondary">Baixar</a>
-            ${App.isAdmin() ? `
+            ${isAdmin ? `
               <button class="btn btn-sm btn-danger" onclick="ContractComponent.deleteAdditive('${additive.id}')">Excluir</button>
             ` : ''}
           </div>

@@ -50,7 +50,11 @@ const AssessmentComponent = {
   renderList() {
     const data = DataManager.getData();
     const assessments = data.assessments || [];
-    const isAdmin = App.isAdmin();
+    
+    // Acesso seguro ao App
+    const app = window.App || {};
+    const isAdmin = typeof app.isAdmin === "function" ? app.isAdmin() : false;
+    const formatDate = typeof app.formatDate === "function" ? app.formatDate : (d => d || "-");
 
     const grouped = {
       red_flag: assessments.filter(a => a.classificacao === 'red_flag'),
@@ -129,7 +133,7 @@ const AssessmentComponent = {
                       </div>
                     </td>
                     <td>${emp ? emp.area : 'N/A'}</td>
-                    <td>${App.formatDate(a.date)}</td>
+                    <td>${formatDate(a.date)}</td>
                     <td><span class="score ${this.getScoreClass(medias.entregas)}">${medias.entregas.toFixed(1)}</span></td>
                     <td><span class="score ${this.getScoreClass(medias.comportamentos)}">${medias.comportamentos.toFixed(1)}</span></td>
                     <td><span class="score ${this.getScoreClass(medias.cultura)}">${medias.cultura.toFixed(1)}</span></td>
@@ -162,7 +166,10 @@ const AssessmentComponent = {
   renderWizard(existingAssessment) {
     const data = DataManager.getData();
     const config = data.assessmentConfig;
-    const isAdmin = App.isAdmin();
+    
+    // Acesso seguro ao App
+    const app = window.App || {};
+    const isAdmin = typeof app.isAdmin === "function" ? app.isAdmin() : false;
 
     if (!isAdmin) {
       return `<div class="card"><p>Acesso restrito a administradores.</p></div>`;
@@ -651,7 +658,10 @@ const AssessmentComponent = {
     const data = DataManager.getData();
     const assessments = data.assessments || [];
     const config = data.assessmentConfig;
-    const isAdmin = App.isAdmin();
+    
+    // Acesso seguro ao App
+    const app = window.App || {};
+    const isAdmin = typeof app.isAdmin === "function" ? app.isAdmin() : false;
 
     const grouped = {
       red_flag: assessments.filter(a => a.classificacao === 'red_flag'),

@@ -7,7 +7,12 @@ const JourneyComponent = {
     const data = DataManager.getData();
     const journeyData = data.journey;
     const phases = journeyData.phases.sort((a, b) => a.order - b.order);
-    const isAdmin = App.isAdmin();
+    
+    // Acesso seguro ao App
+    const app = window.App || {};
+    const isAdmin = typeof app.isAdmin === "function" ? app.isAdmin() : false;
+    const formatDate = typeof app.formatDate === "function" ? app.formatDate : (d => d || "-");
+    const getStatusClass = typeof app.getStatusClass === "function" ? app.getStatusClass : (s => "");
 
     const currentPhase = phases.find(p => p.id === journeyData.currentPhase);
     const nextPhase = phases.find(p => p.id === journeyData.nextPhase);
@@ -41,7 +46,7 @@ const JourneyComponent = {
               <label>Próxima Fase</label>
               <h4>${nextPhase ? nextPhase.title : 'N/A'}</h4>
               <p class="text-muted">${nextPhase ? nextPhase.description : ''}</p>
-              <span class="next-date">Previsto: ${nextPhase ? App.formatDate(nextPhase.dueDate) : 'N/A'}</span>
+              <span class="next-date">Previsto: ${nextPhase ? formatDate(nextPhase.dueDate) : 'N/A'}</span>
             </div>
           </div>
         </div>
@@ -58,7 +63,7 @@ const JourneyComponent = {
         ` : ''}
         <div class="journey-timeline">
           ${phases.map((step, index) => `
-          <div class="journey-step ${App.getStatusClass(step.status)} ${step.id === journeyData.currentPhase ? 'current-phase' : ''} ${this.editingStep === step.id ? 'editing' : ''}" data-step-id="${step.id}">
+          <div class="journey-step ${getStatusClass(step.status)} ${step.id === journeyData.currentPhase ? 'current-phase' : ''} ${this.editingStep === step.id ? 'editing' : ''}" data-step-id="${step.id}">
             <div class="journey-header">
               <div>
                 <span style="color: var(--text-muted); font-size: 12px;">
@@ -73,7 +78,7 @@ const JourneyComponent = {
 
             <div class="journey-meta">
               <span>Responsável: ${step.owner}</span>
-              <span>Data Prevista: ${App.formatDate(step.dueDate)}</span>
+              <span>Data Prevista: ${formatDate(step.dueDate)}</span>
             </div>
 
             <div class="journey-progress">
@@ -140,7 +145,7 @@ const JourneyComponent = {
             <div class="order-history-list">
               ${journeyData.orderHistory.map(entry => `
                 <div class="history-entry">
-                  <div class="history-date">${App.formatDate(entry.date)}</div>
+                  <div class="history-date">${formatDate(entry.date)}</div>
                   <div class="history-change">${entry.change}</div>
                   <div class="history-user">${entry.changedBy}</div>
                 </div>

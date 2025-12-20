@@ -11,7 +11,11 @@ const MeetingsComponent = {
   render() {
     const data = DataManager.getData();
     const meetings = this.getFilteredMeetings(data.meetings);
-    const isAdmin = App.isAdmin();
+    
+    // Acesso seguro ao App
+    const app = window.App || {};
+    const isAdmin = typeof app.isAdmin === "function" ? app.isAdmin() : false;
+    const formatDate = typeof app.formatDate === "function" ? app.formatDate : (d => d || "-");
 
     const departments = [...new Set(data.meetings.map(m => m.department))];
     const types = [...new Set(data.meetings.map(m => m.type))];
@@ -66,7 +70,7 @@ const MeetingsComponent = {
           </div>
 
           <div class="meeting-meta">
-            <span>Data: ${App.formatDate(meeting.date)}</span>
+            <span>Data: ${formatDate(meeting.date)}</span>
             <span>Departamento: ${meeting.department}</span>
           </div>
 
