@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LGC Consultoria - Portal de Cultura Organizacional</title>
   <link rel="stylesheet" href="styles.css">
+  <!-- Garantir que App exista no escopo global antes de carregar componentes não-module -->
+  <script>
+    window.App = window.App || {};
+  </script>
 </head>
 <body>
   <div class="app-container">
