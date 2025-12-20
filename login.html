@@ -247,8 +247,8 @@
           user_id: data.user.id
         }));
 
-        // Redirecionar para a aplicação
-        window.location.href = "/index.html";
+        // Redirecionar para a aplicação (usando replace para evitar voltar ao login)
+        window.location.replace("/index.html");
 
       } catch (error) {
         console.error("Erro no login:", error);

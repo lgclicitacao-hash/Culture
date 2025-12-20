@@ -7,21 +7,6 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- Auth Guard - Verifica autenticação antes de carregar a aplicação -->
-  <script type="module">
-    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-    const supabase = createClient(
-      "https://uushczefewuwnictpkqn.supabase.co",
-      "sb_publishable_a4UXyq9feisKV_6Tge459w_7Ioa7U97"
-    );
-
-    const { data } = await supabase.auth.getSession();
-    if (!data.session) {
-      window.location.href = "/login.html";
-    }
-  </script>
-
   <div class="app-container">
     <header id="header"></header>
     <aside id="sidebar"></aside>

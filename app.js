@@ -11,8 +11,12 @@ const App = {
   currentUser: null,
   currentRoute: "dashboard",
   supabase: supabase,
+  isRedirecting: false,
 
   async init() {
+    // Evitar múltiplas inicializações
+    if (this.isRedirecting) return;
+    
     DataManager.init();
     await this.checkAuth();
     this.setupRouter();
@@ -20,6 +24,18 @@ const App = {
   },
 
   async checkAuth() {
+    // Evitar verificações múltiplas
+    if (this.isRedirecting) return;
+
+    // Verificar sessão do Supabase PRIMEIRO
+    const { data } = await supabase.auth.getSession();
+    if (!data.session) {
+      this.isRedirecting = true;
+      localStorage.removeItem("session_profile");
+      window.location.replace("/login.html");
+      return;
+    }
+
     // Carregar perfil do localStorage
     const cachedProfile = localStorage.getItem("session_profile");
     if (cachedProfile) {
@@ -29,13 +45,6 @@ const App = {
         console.error("Erro ao parsear perfil:", e);
         localStorage.removeItem("session_profile");
       }
-    }
-
-    // Verificar sessão do Supabase
-    const { data } = await supabase.auth.getSession();
-    if (!data.session) {
-      window.location.href = "/login.html";
-      return;
     }
 
     // Se não tem perfil em cache, buscar do Supabase
@@ -48,7 +57,10 @@ const App = {
 
       if (error) {
         console.error("Erro ao buscar perfil:", error);
-        window.location.href = "/login.html";
+        this.isRedirecting = true;
+        localStorage.removeItem("session_profile");
+        await supabase.auth.signOut();
+        window.location.replace("/login.html");
         return;
       }
 
@@ -64,7 +76,7 @@ const App = {
 
     // Configurar rota inicial
     const currentHash = window.location.hash.slice(1) || "";
-    if (currentHash === "login" || currentHash === "") {
+    if (currentHash === "" || currentHash === "login") {
       this.currentRoute = "dashboard";
       window.location.hash = "dashboard";
     } else {
@@ -73,10 +85,13 @@ const App = {
   },
 
   async logout() {
+    if (this.isRedirecting) return;
+    
+    this.isRedirecting = true;
     await supabase.auth.signOut();
     this.currentUser = null;
     localStorage.removeItem("session_profile");
-    window.location.href = "/login.html";
+    window.location.replace("/login.html");
   },
 
   isAdmin() {
@@ -102,11 +117,9 @@ const App = {
 
   setupRouter() {
     window.addEventListener("hashchange", () => {
-      const route = window.location.hash.slice(1) || "login";
-      if (route !== "login" && !this.currentUser) {
-        this.navigate("login");
-        return;
-      }
+      if (this.isRedirecting) return;
+      
+      const route = window.location.hash.slice(1) || "dashboard";
       this.currentRoute = route;
       this.render();
     });
@@ -117,15 +130,14 @@ const App = {
   },
 
   render() {
+    if (this.isRedirecting) return;
+    
     const mainContent = document.getElementById("main-content");
     const sidebar = document.getElementById("sidebar");
     const header = document.getElementById("header");
 
-    if (this.currentRoute === "login" || !this.currentUser) {
-      sidebar.style.display = "none";
-      header.style.display = "none";
-      mainContent.innerHTML = LoginComponent.render();
-      LoginComponent.afterRender();
+    if (!this.currentUser) {
+      // Não deveria chegar aqui, mas por segurança...
       return;
     }
 
