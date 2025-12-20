@@ -4,6 +4,10 @@ const ManualComponent = {
   render() {
     const data = DataManager.getData();
     const manual = data.documents.cultureManual;
+    
+    // Acesso seguro ao App
+    const app = window.App || {};
+    const formatDate = typeof app.formatDate === "function" ? app.formatDate : (d => d || "-");
 
     return `
       <div class="page-header">
@@ -39,7 +43,7 @@ const ManualComponent = {
               </div>
               <div class="meta-item">
                 <span class="meta-label">Data de Aprovacao</span>
-                <span class="meta-value">${App.formatDate(manual.approvedAt)}</span>
+                <span class="meta-value">${formatDate(manual.approvedAt)}</span>
               </div>
             </div>
             <div class="document-actions">
@@ -70,3 +74,6 @@ const ManualComponent = {
     // Nenhuma interação adicional necessária
   }
 };
+
+// Expor componente globalmente
+window.ManualComponent = ManualComponent;

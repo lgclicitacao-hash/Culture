@@ -286,3 +286,6 @@ const EmployeesComponent = {
     // Nenhuma interação adicional necessária
   }
 };
+
+// Expor componente globalmente
+window.EmployeesComponent = EmployeesComponent;

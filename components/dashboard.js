@@ -6,6 +6,10 @@ const DashboardComponent = {
     const kpis = data.kpis;
     const lastMonth = kpis.months.length - 1;
     const prevMonth = lastMonth - 1;
+    
+    // Acesso seguro ao App
+    const app = window.App || {};
+    const getIcon = typeof app.getIcon === "function" ? app.getIcon.bind(app) : (type => "");
 
     return `
       <div class="page-header">
@@ -51,13 +55,13 @@ const DashboardComponent = {
         </div>
         <div class="quick-links">
           <a href="#journey" class="quick-link">
-            ${App.getIcon("map")} Ver Jornada
+            ${getIcon("map")} Ver Jornada
           </a>
           <a href="#meetings" class="quick-link">
-            ${App.getIcon("calendar")} Ver Reunioes
+            ${getIcon("calendar")} Ver Reunioes
           </a>
           <a href="#employees" class="quick-link">
-            ${App.getIcon("users")} Ver Funcionarios
+            ${getIcon("users")} Ver Funcionarios
           </a>
         </div>
       </div>
@@ -125,3 +129,6 @@ const DashboardComponent = {
     // Nenhuma interação adicional necessária
   }
 };
+
+// Expor componente globalmente
+window.DashboardComponent = DashboardComponent;

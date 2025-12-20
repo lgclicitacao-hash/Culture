@@ -4,6 +4,12 @@ const TimelineComponent = {
   render() {
     const data = DataManager.getData();
     const { project, timeline, nextSteps } = data;
+    
+    // Acesso seguro ao App
+    const app = window.App || {};
+    const formatDate = typeof app.formatDate === "function" ? app.formatDate : (d => d || "-");
+    const getStatusClass = typeof app.getStatusClass === "function" ? app.getStatusClass : (s => "");
+    const isAdmin = typeof app.isAdmin === "function" ? app.isAdmin() : false;
 
     // Validar dados
     if (!project || !timeline || !nextSteps) {
@@ -43,14 +49,14 @@ const TimelineComponent = {
               <div class="setup-icon">📅</div>
               <div class="setup-content">
                 <label>Data de Início</label>
-                <div class="setup-value">${App.formatDate(project.startDate)}</div>
+                <div class="setup-value">${formatDate(project.startDate)}</div>
               </div>
             </div>
             <div class="setup-card">
               <div class="setup-icon">🎯</div>
               <div class="setup-content">
                 <label>Data de Término</label>
-                <div class="setup-value">${App.formatDate(project.endDate)}</div>
+                <div class="setup-value">${formatDate(project.endDate)}</div>
               </div>
             </div>
             <div class="setup-card">
@@ -81,8 +87,8 @@ const TimelineComponent = {
               <div class="progress-fill" style="width: ${progressPercent}%"></div>
             </div>
             <div class="progress-dates">
-              <span>${App.formatDate(project.startDate)}</span>
-              <span>${App.formatDate(project.endDate)}</span>
+              <span>${formatDate(project.startDate)}</span>
+              <span>${formatDate(project.endDate)}</span>
             </div>
           </div>
         </div>
@@ -153,7 +159,7 @@ const TimelineComponent = {
                      new Date(milestone.actualDate + "T00:00:00") > new Date(milestone.plannedDate + "T00:00:00");
 
     return `
-      <div class="milestone-item ${App.getStatusClass(milestone.status)}">
+      <div class="milestone-item ${getStatusClass(milestone.status)}">
         <div class="milestone-timeline-line">
           <div class="milestone-dot"></div>
           ${index < 5 ? '<div class="milestone-connector"></div>' : ''}
@@ -161,7 +167,7 @@ const TimelineComponent = {
         <div class="milestone-content">
           <div class="milestone-header">
             <h3>${milestone.title}</h3>
-            <span class="milestone-status ${App.getStatusClass(milestone.status)}">
+            <span class="milestone-status ${getStatusClass(milestone.status)}">
               ${milestone.status}
             </span>
           </div>
@@ -169,12 +175,12 @@ const TimelineComponent = {
           <div class="milestone-dates">
             <div class="date-item">
               <label>Planejado:</label>
-              <span>${App.formatDate(milestone.plannedDate)}</span>
+              <span>${formatDate(milestone.plannedDate)}</span>
             </div>
             <div class="date-item">
               <label>Realizado:</label>
               <span class="${isDelayed ? 'text-warning' : ''}">
-                ${hasActualDate ? App.formatDate(milestone.actualDate) : '-'}
+                ${hasActualDate ? formatDate(milestone.actualDate) : '-'}
                 ${isDelayed ? ' ⚠️' : ''}
               </span>
             </div>
@@ -207,9 +213,9 @@ const TimelineComponent = {
           </div>
           <div class="info-item">
             <label>Prazo:</label>
-            <span>${App.formatDate(step.dueDate)}</span>
+            <span>${formatDate(step.dueDate)}</span>
           </div>
-          ${App.isAdmin() ? `
+          ${isAdmin ? `
             <button class="btn-secondary btn-sm" onclick="TimelineComponent.toggleStepStatus('${step.id}')">
               Marcar como ${step.status === "Concluído" ? "Pendente" : "Concluído"}
             </button>
